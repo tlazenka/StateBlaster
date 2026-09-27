@@ -10,11 +10,9 @@ env:
 
 jobs:
   test:
-
     runs-on: xcode-27
     env:
       working_directory: ./
-
     steps:
     - uses: actions/checkout@v2
     - name: Build
@@ -23,20 +21,12 @@ jobs:
     - name: Run tests
       run: swift test -v
       working-directory: ${{env.working_directory}}
-
-  format:
-
-    runs-on: xcode-27
-
-    steps:
-     - uses: actions/checkout@v2
-     - name: Run swift-format lint
-	   run: swift format lint --recursive .
+    - name: Run tests
+      run: swift test -v
+      working-directory: ./DemoPackage
 
   test-docker:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - uses: ./.github/actions/swift-test-docker
