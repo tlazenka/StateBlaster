@@ -1,0 +1,19 @@
+version: '2'
+services:
+  tests:
+    build:
+        context: .
+        dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: swift test
+  format:
+    build:
+        context: .
+        dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: swift format lint --recursive .
+
