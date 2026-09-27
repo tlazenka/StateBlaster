@@ -437,13 +437,13 @@ private class KtorProjectionProcessor(
             appendLine("import io.ktor.http.*")
             appendLine("import kotlinx.serialization.encodeToString")
             appendLine("import kotlinx.serialization.json.Json")
-            appendLine("class ${base}Client(private val http: HttpClient, private val baseUrl: String = \"\", private val json: Json = Json { classDiscriminator = \"type\" }) {")
+            appendLine("class ${base}Client(private val http: HttpClient, private val baseUrl: String = \"\", private val _json: Json = Json { classDiscriminator = \"type\" }) {")
             ops.forEach { op ->
                 val cap = op.name.replaceFirstChar(Char::uppercase)
                 val route = op.name.removePrefix("submit").replaceFirstChar(Char::lowercase)
                 appendLine("""  suspend fun ${op.name}(request: ${op.inputType}): ${cap}Response {
     val url = baseUrl + "$path/$route"
-    val jsonBody = json.encodeToString(request)
+    val jsonBody = _json.encodeToString(request)
     println("cURL: curl -X POST -H 'Content-Type: application/json' --data '${'$'}jsonBody' '${'$'}url'")
     return http.post(url) {
       contentType(ContentType.Application.Json)
