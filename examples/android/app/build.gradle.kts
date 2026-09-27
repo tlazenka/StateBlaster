@@ -4,6 +4,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.compose")
     id("org.jetbrains.kotlin.plugin.serialization") version "2.3.20"
 }
+
 android {
     namespace = "com.stateblaster.example"
     compileSdk = 37
@@ -18,6 +19,7 @@ android {
         compose = true
     }
 }
+
 dependencies {
     implementation("com.stateblaster.witness:witness-annotations:0.1.0")
     implementation("com.stateblaster.witness:witness-runtime:0.1.0")

@@ -9,9 +9,7 @@ kotlin {
         browser()
     }
     sourceSets {
-        commonMain.dependencies {
-
-        }
+        commonMain.dependencies {}
     }
 }
 

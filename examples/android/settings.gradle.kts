@@ -16,4 +16,5 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "AndroidClientExample"
+
 include(":app")

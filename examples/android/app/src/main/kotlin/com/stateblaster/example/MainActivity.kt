@@ -41,45 +41,45 @@ private fun OnboardingApp() {
             classDiscriminator = "type"
         }
     }
-    val http = remember(_json) {
-        HttpClient(OkHttp) {
-            install(ContentNegotiation) {
-                json(_json)
+    val http =
+        remember(_json) {
+            HttpClient(OkHttp) {
+                install(ContentNegotiation) {
+                    json(_json)
+                }
             }
         }
-    }
     DisposableEffect(http) {
         onDispose {
             http.close()
         }
     }
-    val client = remember(http, _json) {
-        OnboardingClient(
-            http,
-            "http://10.0.2.2:8080",
-            _json,
-        )
-    }
+    val client =
+        remember(http, _json) {
+            OnboardingClient(
+                http,
+                "http://10.0.2.2:8080",
+                _json,
+            )
+        }
     OnboardingNavigation(
         machine,
         OnboardingScreens(
             phoneEntry = { scope -> PhoneScreen(scope, client) },
             codeEntry = { scope -> CodeScreen(scope, client) },
-            phoneError = {
-                scope -> ErrorScreen(
-                scope.state.error
-                )
-                         },
-            codeError = {
-                scope -> ErrorScreen(
-                scope.state.error)
-                        },
-            finished = { FinishedScreen() }
-        )
+            phoneError = { scope ->
+                ErrorScreen(scope.state.error)
+            },
+            codeError = { scope ->
+                ErrorScreen(scope.state.error)
+            },
+            finished = { FinishedScreen() },
+        ),
     )
 }
 
-@Composable private fun PhoneScreen(
+@Composable
+private fun PhoneScreen(
     scope: PhoneEntryScope,
     client: OnboardingClient,
 ) {
@@ -101,9 +101,11 @@ private fun OnboardingApp() {
                 coroutineScope.launch {
                     submitting = true
                     try {
-                        client.submitPhone(
-                            SubmitPhone(phone),
-                        ).applyTo(scope)
+                        client
+                            .submitPhone(
+                                SubmitPhone(phone),
+                            )
+                            .applyTo(scope)
                     } finally {
                         submitting = false
                     }
@@ -117,7 +119,8 @@ private fun OnboardingApp() {
     }
 }
 
-@Composable private fun CodeScreen(
+@Composable
+private fun CodeScreen(
     scope: CodeEntryScope,
     client: OnboardingClient,
 ) {
@@ -140,12 +143,14 @@ private fun OnboardingApp() {
                 coroutineScope.launch {
                     submitting = true
                     try {
-                        client.submitCode(
-                            SubmitCode(
-                                phoneNumber = scope.state.phoneNumber,
-                                code = code,
-                            ),
-                        ).applyTo(scope)
+                        client
+                            .submitCode(
+                                SubmitCode(
+                                    phoneNumber = scope.state.phoneNumber,
+                                    code = code,
+                                ),
+                            )
+                            .applyTo(scope)
                     } finally {
                         submitting = false
                     }
@@ -159,7 +164,8 @@ private fun OnboardingApp() {
     }
 }
 
-@Composable private fun ErrorScreen(message: String) {
+@Composable
+private fun ErrorScreen(message: String) {
     ScreenColumn {
         Text("Sorry, there was an error.", style = MaterialTheme.typography.headlineMedium)
         Text(message)
@@ -167,16 +173,21 @@ private fun OnboardingApp() {
     }
 }
 
-@Composable private fun FinishedScreen() {
+@Composable
+private fun FinishedScreen() {
     ScreenColumn {
         Text("Congratulations!", style = MaterialTheme.typography.headlineLarge)
         Text("Consider yourself onboarded.")
     }
 }
 
-@Composable private fun ScreenColumn(content: @Composable () -> Unit) {
+@Composable
+private fun ScreenColumn(content: @Composable () -> Unit) {
     Column(
         modifier = Modifier.fillMaxSize().padding(24.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) { Spacer(Modifier.height(24.dp)); content() }
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+    ) {
+        Spacer(Modifier.height(24.dp))
+        content()
+    }
 }

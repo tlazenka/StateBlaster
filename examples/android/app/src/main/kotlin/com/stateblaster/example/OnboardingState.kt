@@ -1,13 +1,11 @@
 package com.stateblaster.example
+
 import com.stateblaster.witness.*
 import kotlinx.serialization.Serializable
 
+@Serializable data class SubmitPhone(val phoneNumber: String)
 
-@Serializable
-data class SubmitPhone(val phoneNumber: String)
-
-@Serializable
-data class SubmitCode(val phoneNumber: String, val code: String)
+@Serializable data class SubmitCode(val phoneNumber: String, val code: String)
 
 @StateGraph
 @StateMachine
@@ -30,7 +28,8 @@ sealed interface OnboardingState {
     data class PhoneError(val phoneNumber: String, val error: String) : OnboardingState
 
     @Transition(CodeEntry::class)
-    data class CodeError(val phoneNumber: String, val code: String, val error: String) : OnboardingState
+    data class CodeError(val phoneNumber: String, val code: String, val error: String) :
+        OnboardingState
 
     data object Finished : OnboardingState
 }

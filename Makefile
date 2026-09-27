@@ -1,6 +1,10 @@
 .PHONY: format-swift
 format-swift:
 	swift format . --recursive --in-place 
+
+.PHONY: format-kotlin
+format-kotlin:
+	ktfmt --enable-editorconfig . 
 	
 .PHONY: test-swift
 test-swift:
