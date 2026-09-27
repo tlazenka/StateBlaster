@@ -5,8 +5,10 @@
 //  Created by Francis Lazenka on 9/27/26.
 //
 
-import CommonCrypto
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 public enum AppState {
     case initializing
@@ -271,6 +273,14 @@ public extension String {
     }
 }
 
+
+extension RemoteUser: Hashable {
+
+}
+
+#if canImport(CoreData)
+import CommonCrypto
+
 extension Data {
     var sha256: Data {
         var hash = [UInt8](repeating: 0, count: Int(CC_SHA256_DIGEST_LENGTH))
@@ -280,7 +290,10 @@ extension Data {
         return Data(hash)
     }
 }
-
-extension RemoteUser: Hashable {
-
+#else
+extension Data {
+    var sha256: Data {
+        fatalError("Need to implement without CommonCrypto")
+    }
 }
+#endif

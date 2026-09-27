@@ -1,6 +1,5 @@
 import Foundation
 import XCTest
-import os.log
 
 @testable import StateBlaster
 @testable import StateBlasterApp

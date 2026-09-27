@@ -1,17 +1,19 @@
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 import XCTest
-import os.log
 
 @testable import StateBlasterApp
 
+#if canImport(CoreData)
+
 @MainActor public class DataManagerTests: XCTestCase {
     var userDefaults: UserDefaults!
-    var logger: Logger!
 
     public override func setUp() async throws {
         userDefaults = UserDefaults(suiteName: name)
         userDefaults.removePersistentDomain(forName: name)
-        logger = Logger(subsystem: "com.warest.DoorTests", category: "Door")
     }
 
     func testCreateUser() async throws {
@@ -24,9 +26,8 @@ import os.log
             AuthenticatorMock.GetCredentialResult, SignInResultMock, String, AuthenticatorMock
         >(
             coreDataManager: DoorCoreDataManager(persistentStoreType: .inMemory),
-            remoteDataManager: .makeMock(urlSessionConfiguration: urlSessionConfiguration, logger: logger),
+            remoteDataManager: .makeMock(urlSessionConfiguration: urlSessionConfiguration),
             authenticator: AuthenticatorMock(),
-            logger: logger,
             userDefaults: userDefaults,
             notificationCenter: NotificationCenter(),
             blobCache: .init()
@@ -47,9 +48,8 @@ import os.log
             AuthenticatorMock.GetCredentialResult, SignInResultMock, String, AuthenticatorMock
         >(
             coreDataManager: DoorCoreDataManager(persistentStoreType: .inMemory),
-            remoteDataManager: .makeMock(urlSessionConfiguration: urlSessionConfiguration, logger: logger),
+            remoteDataManager: .makeMock(urlSessionConfiguration: urlSessionConfiguration),
             authenticator: AuthenticatorMock(),
-            logger: logger,
             userDefaults: userDefaults,
             notificationCenter: NotificationCenter(),
             blobCache: .init()
@@ -82,9 +82,8 @@ import os.log
             AuthenticatorMock.GetCredentialResult, SignInResultMock, String, AuthenticatorMock
         >(
             coreDataManager: DoorCoreDataManager(persistentStoreType: .inMemory),
-            remoteDataManager: .makeMock(urlSessionConfiguration: urlSessionConfiguration, logger: logger),
+            remoteDataManager: .makeMock(urlSessionConfiguration: urlSessionConfiguration),
             authenticator: AuthenticatorMock(),
-            logger: logger,
             userDefaults: userDefaults,
             notificationCenter: NotificationCenter(),
             blobCache: .init()
@@ -179,3 +178,5 @@ extension DataManagerTests {
         }
     }
 }
+
+#endif

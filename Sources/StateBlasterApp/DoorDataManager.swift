@@ -5,9 +5,9 @@
 //  Created by Francis Lazenka on 9/27/26.
 //
 
+#if canImport(CoreData)
 import CoreData
 import Foundation
-import os.log
 
 public final class DoorDataManager<Credential, SignInResult, APNSTokenType, AuthenticatorType>
 where
@@ -16,7 +16,6 @@ where
 {
     public let userDefaults: UserDefaults
     public let notificationCenter: NotificationCenter
-    public let logger: Logger
     public let coreDataManager: DoorCoreDataManager
     private let remoteDataManager: DoorRemoteDataManager
     public let authenticator: AuthenticatorType
@@ -36,13 +35,11 @@ where
         coreDataManager: DoorCoreDataManager,
         remoteDataManager: DoorRemoteDataManager,
         authenticator: AuthenticatorType,
-        logger: Logger,
         userDefaults: UserDefaults,
         notificationCenter: NotificationCenter,
         blobCache: DataCache
     ) {
         self.userDefaults = userDefaults
-        self.logger = logger
         self.coreDataManager = coreDataManager
         self.remoteDataManager = remoteDataManager
 
@@ -240,3 +237,4 @@ extension UserDefaults {
         bool(forKey: "shouldCheckContactsAutomatically")
     }
 }
+#endif

@@ -6,7 +6,9 @@
 //
 
 import Foundation
-import os.log
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 extension Never: Encodable {
     public func encode(to _: Encoder) throws {}
@@ -32,13 +34,11 @@ public final class DoorRemoteDataManager {
     let urlSession: URLSession
     let baseUrl: URL
     public let apiKey: String
-    public let logger: Logger
 
-    public init(urlSession: URLSession, baseUrl: URL, apiKey: String, logger: Logger) {
+    public init(urlSession: URLSession, baseUrl: URL, apiKey: String) {
         self.urlSession = urlSession
         self.baseUrl = baseUrl
         self.apiKey = apiKey
-        self.logger = logger
     }
 
     public func url(pathComponents: [String], queryItems: [URLQueryItem]? = nil) throws -> URL {
@@ -81,14 +81,10 @@ public final class DoorRemoteDataManager {
             }
         }
 
-        logger.debug("\(request, privacy: .private)")
-
         return request
     }
 
     public func response<ResponseType: Decodable>(for request: URLRequest) async throws -> ResponseType {
-        logger.debug("\(request, privacy: .private)")
-
         let (data, response) = try await urlSession.data(for: request)
         guard
             let httpResponse = response as? HTTPURLResponse,
@@ -101,8 +97,6 @@ public final class DoorRemoteDataManager {
     }
 
     public func data(for request: URLRequest) async throws -> Data {
-        logger.debug("\(request, privacy: .private)")
-
         let (data, response) = try await urlSession.data(for: request)
         guard
             let httpResponse = response as? HTTPURLResponse,

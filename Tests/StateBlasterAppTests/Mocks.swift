@@ -1,5 +1,7 @@
 import Foundation
-import os.log
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 @testable import StateBlasterApp
 
@@ -50,12 +52,11 @@ class AuthenticatorMock: DoorAuthenticator {
 }
 
 extension DoorRemoteDataManager {
-    static func makeMock(urlSessionConfiguration: URLSessionConfiguration, logger: Logger) -> DoorRemoteDataManager {
+    static func makeMock(urlSessionConfiguration: URLSessionConfiguration) -> DoorRemoteDataManager {
         DoorRemoteDataManager(
             urlSession: .init(configuration: urlSessionConfiguration),
             baseUrl: URL(string: "mock")!,
             apiKey: "mock",
-            logger: logger
         )
     }
 }

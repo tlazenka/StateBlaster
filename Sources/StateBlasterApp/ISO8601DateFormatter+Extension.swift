@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import os.log
 
 extension ISO8601DateFormatter {
     nonisolated static let withFractionalSeconds: ISO8601DateFormatter = {

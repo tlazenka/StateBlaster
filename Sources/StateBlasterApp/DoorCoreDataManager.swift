@@ -5,6 +5,7 @@
 //  Created by Francis Lazenka on 9/27/26.
 //
 
+#if canImport(CoreData)
 import CoreData
 
 public struct DoorCoreDataManager {
@@ -326,3 +327,4 @@ public extension DoorCoreDataManager {
         )
     }
 }
+#endif
