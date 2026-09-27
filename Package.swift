@@ -5,72 +5,107 @@ import CompilerPluginSupport
 import PackageDescription
 
 let package = Package(
-  name: "StateBlaster",
-  platforms: [.macOS(.v26), .iOS(.v13), .tvOS(.v13), .watchOS(.v6), .macCatalyst(.v13)],
-  products: [
-    // Products define the executables and libraries a package produces, making them visible to other packages.
-    .library(
-      name: "StateBlaster",
-      targets: ["StateBlaster"]
-    ),
-    .executable(
-      name: "StateBlasterClient",
-      targets: ["StateBlasterClient"]
-    ),
-  ],
-  dependencies: [
-    .package(url: "https://github.com/swiftlang/swift-syntax.git", from: "604.0.0-latest")
-  ],
-  targets: [
-    // Targets are the basic building blocks of a package, defining a module or a test suite.
-    // Targets can depend on other targets in this package and products from dependencies.
-    // Macro implementation that performs the source transformation of a macro.
-    .macro(
-      name: "StateBlasterMacros",
-      dependencies: [
-        .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
-        .product(name: "SwiftCompilerPlugin", package: "swift-syntax"),
-      ]
-    ),
+    name: "StateBlaster",
+    platforms: [.macOS(.v26), .iOS(.v16), .tvOS(.v16), .watchOS(.v9), .macCatalyst(.v16)],
+    products: [
+        // Products define the executables and libraries a package produces, making them visible to other packages.
+        .library(
+            name: "StateBlaster",
+            targets: ["StateBlaster"]
+        ),
+        .executable(
+            name: "StateBlasterClient",
+            targets: ["StateBlasterClient"]
+        ),
+        .plugin(
+            name: "StateBlasterStoryboardPlugin",
+            targets: ["StateBlasterStoryboardPlugin"]
+        ),
+    ],
+    dependencies: [
+        .package(url: "https://github.com/swiftlang/swift-syntax.git", from: "604.0.0-latest")
+    ],
+    targets: [
+        // Targets are the basic building blocks of a package, defining a module or a test suite.
+        // Targets can depend on other targets in this package and products from dependencies.
+        // Macro implementation that performs the source transformation of a macro.
+        .target(
+            name: "StateBlasterPresentationParser"
+        ),
+        .executableTarget(
+            name: "StateBlasterStoryboardGenerator",
+            dependencies: ["StateBlasterPresentationParser"]
+        ),
+        .plugin(
+            name: "StateBlasterStoryboardPlugin",
+            capability: .buildTool(),
+            dependencies: ["StateBlasterStoryboardGenerator"]
+        ),
+        .macro(
+            name: "StateBlasterMacros",
+            dependencies: [
+                .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
+                .product(name: "SwiftCompilerPlugin", package: "swift-syntax"),
+            ]
+        ),
 
-    // Library that exposes a macro as part of its API, which is used in client programs.
-    .target(
-      name: "StateBlaster",
-      dependencies: ["StateBlasterMacros"],
-      resources: [
-        .process("Resources")
-      ],
-      swiftSettings: [
-        .enableUpcomingFeature("ApproachableConcurrency"),
-        .defaultIsolation(.some(MainActor.self)),
+        // Library that exposes a macro as part of its API, which is used in client programs.
+        .target(
+            name: "StateBlaster",
+            dependencies: ["StateBlasterMacros"],
+            swiftSettings: [
+                .enableUpcomingFeature("ApproachableConcurrency"),
+                .defaultIsolation(.some(MainActor.self)),
 
-      ],
-    ),
+            ],
+        ),
 
-    // A client of the library, which is able to use the macro in its own code.
-    .executableTarget(
-      name: "StateBlasterClient",
-      dependencies: ["StateBlaster"],
-      swiftSettings: [
-        .enableUpcomingFeature("ApproachableConcurrency")
-      ],
-    ),
+        // A client of the library, which is able to use the macro in its own code.
+        .executableTarget(
+            name: "StateBlasterClient",
+            dependencies: ["StateBlaster"],
+            swiftSettings: [
+                .enableUpcomingFeature("ApproachableConcurrency")
+            ],
+        ),
 
-    // A test target used to develop the macro implementation.
-    .testTarget(
-      name: "StateBlasterTests",
-      dependencies: [
-        "StateBlaster",
-        "StateBlasterMacros",
-        .product(name: "SwiftSyntaxMacrosTestSupport", package: "swift-syntax"),
-      ],
-      resources: [
-        .process("Resources")
-      ],
-      swiftSettings: [
-        .enableUpcomingFeature("ApproachableConcurrency")
-      ],
-    ),
-  ],
-  swiftLanguageModes: [.v5],
+        .target(
+            name: "StateBlasterApp",
+            dependencies: ["StateBlaster"],
+            resources: [
+                .process("Resources")
+            ],
+            swiftSettings: [
+                .enableUpcomingFeature("ApproachableConcurrency"),
+                .defaultIsolation(.some(MainActor.self)),
+
+            ],
+        ),
+
+        // A test target used to develop the macro implementation.
+        .testTarget(
+            name: "StateBlasterTests",
+            dependencies: [
+                "StateBlaster",
+                "StateBlasterMacros",
+                .product(name: "SwiftSyntaxMacrosTestSupport", package: "swift-syntax"),
+            ],
+            swiftSettings: [
+                .enableUpcomingFeature("ApproachableConcurrency")
+            ],
+        ),
+        .testTarget(
+            name: "StateBlasterAppTests",
+            dependencies: [
+                "StateBlasterApp"
+            ],
+            resources: [
+                .process("Resources")
+            ],
+            swiftSettings: [
+                .enableUpcomingFeature("ApproachableConcurrency")
+            ],
+        ),
+    ],
+    swiftLanguageModes: [.v5],
 )
