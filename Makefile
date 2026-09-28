@@ -12,11 +12,11 @@ test-swift:
 
 .PHONY: test-swift-docker
 test-swift-docker:
-	docker-compose run --rm tests
+	docker-compose run --rm test-swift
 
 .PHONY: format-swift-docker
 format-swift-docker:
-	docker-compose run --rm format
+	docker-compose run --rm format-swift
 
 .PHONY: build-kotlin
 build-kotlin:

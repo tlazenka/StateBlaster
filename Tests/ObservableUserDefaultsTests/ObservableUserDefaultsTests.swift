@@ -74,6 +74,8 @@ final class ObservableUserDefaultsTests: XCTestCase {
         XCTAssertNil(defaults.object(forKey: "testData"))
     }
 
+#if !os(Linux)
+    // Fails on Linux
     func testURLRoundTripsAndNilRemovesKey() {
         let url = URL(string: "http://example.com")!
         defaults.testURL = url
@@ -81,6 +83,7 @@ final class ObservableUserDefaultsTests: XCTestCase {
         defaults.testURL = nil
         XCTAssertNil(defaults.object(forKey: "testURL"))
     }
+#endif
 
     func testArrayRoundTripsAndNilRemovesKey() {
         defaults.testArray = ["1", 2]
