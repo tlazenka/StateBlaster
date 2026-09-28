@@ -6,6 +6,7 @@
 //
 
 import Foundation
+
 #if canImport(FoundationNetworking)
 import FoundationNetworking
 #endif
@@ -272,7 +273,6 @@ public extension String {
         return data.sha256.map { String(format: "%02hhx", $0) }.joined()
     }
 }
-
 
 extension RemoteUser: Hashable {
 

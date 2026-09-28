@@ -11,8 +11,8 @@ import SwiftSyntaxMacros
 import SwiftSyntaxMacrosTestSupport
 import XCTest
 
-@MainActor final class DoTests: XCTestCase {
-    var service: ServiceProtocol!
+@MainActor final class DoStickTests: XCTestCase {
+    fileprivate var service: ServiceProtocol!
 
     override func setUp() async throws {
         service = ServiceMock()
@@ -41,33 +41,33 @@ import XCTest
     }
 }
 
-enum ServiceFailure: Error {
+private enum ServiceFailure: Error {
 
 }
 
-struct UserID {
+private struct UserID {
     let rawValue: UUID
 }
 
-struct DoorID {
+private struct DoorID {
     let rawValue: UUID
 }
 
-struct User {
+private struct User {
     let id: UserID
 }
 
-struct Door {
+private struct Door {
     let id: DoorID
 }
 
-protocol ServiceProtocol {
+private protocol ServiceProtocol {
     func fetchUser() -> Result<User, ServiceFailure>
 
     func fetchDoor(for userID: UserID) -> Result<Door, ServiceFailure>
 }
 
-final class ServiceMock: ServiceProtocol {
+private final class ServiceMock: ServiceProtocol {
     func fetchUser() -> Result<User, ServiceFailure> {
         .success(User(id: UserID(rawValue: UUID())))
     }

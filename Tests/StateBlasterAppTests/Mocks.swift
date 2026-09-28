@@ -1,9 +1,10 @@
 import Foundation
+
+@testable import StateBlasterApp
+
 #if canImport(FoundationNetworking)
 import FoundationNetworking
 #endif
-
-@testable import StateBlasterApp
 
 struct SignInResultMock: SignInResultProtocol {
     var authUserId: String = "mock"

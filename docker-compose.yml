@@ -3,7 +3,7 @@ services:
   test-swift:
     build:
         context: .
-        dockerfile: Dockerfile.swift
+        dockerfile: Dockerfile
     volumes:
       - .:/app
     working_dir: /app
@@ -11,7 +11,7 @@ services:
   format-swift:
     build:
         context: .
-        dockerfile: Dockerfile.swift
+        dockerfile: Dockerfile
     volumes:
       - .:/app
     working_dir: /app

@@ -1,8 +1,9 @@
 import Foundation
+import XCTest
+
 #if canImport(FoundationNetworking)
 import FoundationNetworking
 #endif
-import XCTest
 
 nonisolated class URLProtocolMock: URLProtocol {
     nonisolated(unsafe) static var requestHandler: ((URLRequest) throws -> (HTTPURLResponse, Data))?
