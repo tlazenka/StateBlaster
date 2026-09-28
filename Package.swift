@@ -107,6 +107,18 @@ let package = Package(
             ],
         ),
         .testTarget(
+            name: "StateBlasterMacrosTests",
+            dependencies: [
+                "StateBlaster",
+                "StateBlasterMacros",
+                .product(name: "SwiftSyntaxMacrosTestSupport", package: "swift-syntax"),
+            ],
+            swiftSettings: [
+                .enableUpcomingFeature("ApproachableConcurrency"),
+                .swiftLanguageMode(.v5),
+            ],
+        ),
+        .testTarget(
             name: "StateBlasterAppTests",
             dependencies: [
                 "StateBlasterApp"
