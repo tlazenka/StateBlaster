@@ -17,5 +17,6 @@ extension URLRequest {
         self.init(url: url)
         self.httpMethod = "POST"
         self.httpBody = imageData
+        self.setValue(mimeType, forHTTPHeaderField: "Content-Type")
     }
 }
